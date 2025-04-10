@@ -96,11 +96,14 @@ if __name__ == "__main__":
         model_name=inference_config.YOLO_MODEL_NAME,
         add_classifier=True,
     )
+    # save_to_disk to save frames
+    # save_crop to save crops
+    # save_to_db to use sqllite for logging
     config = {
         "save_to_disk": False,
         "method": "video",
         "save_crop": False,
-        "save_to_db": True,
+        "save_to_db": False,
     }
     #    results = detector.detect_video("./data/video_test.mp4", **config)
     # results = detector.detect_camera(camera_config=CameraConfig(), **config)
