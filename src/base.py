@@ -10,6 +10,7 @@ import numpy as np
 from tqdm import tqdm
 
 from config import CameraConfig, DetectorInferenceConfig
+from database import insert_one
 from utils import crop_image, get_logger
 
 inference_settings = DetectorInferenceConfig()
@@ -57,6 +58,7 @@ class BaseDetector(ABC):
         boxes,
         ids: Optional[np.ndarray],
         save_to_disk: bool = False,
+        save_to_db: bool = False,
         save_crop: bool = False,
         face=False,
         cls_names=None,
@@ -73,6 +75,8 @@ class BaseDetector(ABC):
             detection = (
                 ids.get(id) if self.classifier is None else self.classifier(crop)
             )
+            if save_to_db:
+                insert_one(detection)
             # text_out=f"Id:{id} | Gender:{detection[0]} | Age: {detection[1]}" if face else f"Id:{id} Car body: {detection}"
             text_out = f"Id : {id} | Detection: {detection} "
             # draw bounding box
@@ -184,13 +188,9 @@ class BaseDetector(ABC):
 
         cap.release()
 
-    def detect_camera(
-        self, camera_config: Optional[CameraConfig], mode: str = "web", **kwargs
-    ):
+    def detect_camera(self, camera_config: Optional[CameraConfig], **kwargs):
         # for laptops with single cameras
-        assert mode in ["web", "rstp"], ValueError(
-            "Mode must be either web or rstp protocol"
-        )
+
         rtsp_url = f"rtsp://{camera_config.USERNAME}:{camera_config.PASSWORD}@{camera_config.URL}:554/stream1"
         cap = cv2.VideoCapture(0 if camera_config is None else rtsp_url)
         if not cap.isOpened():
@@ -198,6 +198,7 @@ class BaseDetector(ABC):
         else:
             self.logger.info("✅ RTSP stream opened successfully.")
 
+        # creates a sql lite db and table if not exists
         vid_dims = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
             cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         )

@@ -47,6 +47,7 @@ class YoloDetector(BaseDetector):
         self,
         image: Union[str, np.ndarray],
         save_to_disk: bool = False,
+        save_to_db: bool = False,
         save_crop: bool = False,
         method: str = "image",
     ):
@@ -79,6 +80,7 @@ class YoloDetector(BaseDetector):
                 boxes,
                 ids=boxes_id,
                 save_to_disk=save_to_disk,
+                save_to_db=save_to_db,
                 save_crop=save_crop,
                 face=False,
             )
@@ -94,7 +96,12 @@ if __name__ == "__main__":
         model_name=inference_config.YOLO_MODEL_NAME,
         add_classifier=True,
     )
-    config = {"save_to_disk": False, "method": "video", "save_crop": False}
+    config = {
+        "save_to_disk": False,
+        "method": "video",
+        "save_crop": False,
+        "save_to_db": True,
+    }
     #    results = detector.detect_video("./data/video_test.mp4", **config)
     # results = detector.detect_camera(camera_config=CameraConfig(), **config)
 
