@@ -203,7 +203,7 @@ class BaseDetector(ABC):
             cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         )
         video_writer, out_path = self.get_video_writer(
-            f"rstp_cam_{uuid.uuid4()}.mp4", cap, vid_dims
+            f"rtsp_cam_{uuid.uuid4()}.mp4", cap, vid_dims
         )
         while True:
             # capture, process and display resulting image

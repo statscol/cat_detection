@@ -58,6 +58,7 @@ class YoloDetector(BaseDetector):
             source=frame,
             device=self.device,
             persist=method == "video",
+            conf=0.01,
             verbose=False,
             save_dir=str(self.out_folder),
             project=str(self.out_folder),
