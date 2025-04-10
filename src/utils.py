@@ -1,5 +1,7 @@
 import logging
 
+import cv2
+
 
 def percent_crop(image, pct: float = 0.7):
     height, width = image.shape[:2]
@@ -30,7 +32,7 @@ def preprocess_yolo_boxes(boxes):
 def crop_image(box, image):
     "box: list| array with xyxy positions"
     x_i, y_i, x_f, y_f = box.astype(int)
-    # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image[y_i:y_f, x_i:x_f]
 
 

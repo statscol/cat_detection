@@ -58,7 +58,7 @@ class YoloDetector(BaseDetector):
             source=frame,
             device=self.device,
             persist=method == "video",
-            conf=0.01,
+            conf=0.05,
             verbose=False,
             save_dir=str(self.out_folder),
             project=str(self.out_folder),
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         "save_to_disk": False,
         "method": "video",
         "save_crop": False,
-        "save_to_db": False,
+        "save_to_db": True,
     }
 
     results = detector.detect_camera(camera_config=CameraConfig(), **config)
