@@ -1,5 +1,4 @@
 import copy
-import logging
 import os
 import uuid
 from abc import ABC, abstractmethod
@@ -11,20 +10,14 @@ import numpy as np
 from tqdm import tqdm
 
 from config import CameraConfig, DetectorInferenceConfig
-from utils import crop_image
+from utils import crop_image, get_logger
 
 inference_settings = DetectorInferenceConfig()
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)-8s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
 
 
 class BaseDetector(ABC):
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logger()
 
     @abstractmethod
     def load_model(self):
@@ -80,7 +73,6 @@ class BaseDetector(ABC):
             detection = (
                 ids.get(id) if self.classifier is None else self.classifier(crop)
             )
-            print("DETECTION: ", detection)
             # text_out=f"Id:{id} | Gender:{detection[0]} | Age: {detection[1]}" if face else f"Id:{id} Car body: {detection}"
             text_out = f"Id : {id} | Detection: {detection} "
             # draw bounding box
@@ -200,17 +192,15 @@ class BaseDetector(ABC):
             "Mode must be either web or rstp protocol"
         )
         rtsp_url = f"rtsp://{camera_config.USERNAME}:{camera_config.PASSWORD}@{camera_config.URL}:554/stream1"
-        print(rtsp_url)
         cap = cv2.VideoCapture(0 if camera_config is None else rtsp_url)
         if not cap.isOpened():
-            print("❌ Failed to connect to the RTSP stream.")
+            self.logger.info("❌ Failed to connect to the RTSP stream.")
         else:
-            print("✅ RTSP stream opened successfully.")
+            self.logger.info("✅ RTSP stream opened successfully.")
 
         vid_dims = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
             cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         )
-        print(vid_dims)
         video_writer, out_path = self.get_video_writer(
             f"rstp_cam_{uuid.uuid4()}.mp4", cap, vid_dims
         )

@@ -92,9 +92,9 @@ if __name__ == "__main__":
     detector = YoloDetector(
         #        classifier_path=inference_config.CLASSIFIER_PATH,
         model_name=inference_config.YOLO_MODEL_NAME,
-        add_classifier=False,
+        add_classifier=True,
     )
-    config = {"save_to_disk": False, "method": "video", "save_crop": True}
+    config = {"save_to_disk": False, "method": "video", "save_crop": False}
     #    results = detector.detect_video("./data/video_test.mp4", **config)
     # results = detector.detect_camera(camera_config=CameraConfig(), **config)
 
