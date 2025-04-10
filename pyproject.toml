@@ -1,0 +1,21 @@
+[project]
+name = "cat-detector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "albumentations>=2.0.5",
+    "clip",
+    "lap>=0.5.12",
+    "onnxruntime>=1.21.0",
+    "pre-commit>=4.2.0",
+    "pydantic-settings>=2.8.1",
+    "python-dotenv>=1.1.0",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+    "ultralytics>=8.3.105",
+]
+
+[tool.uv.sources]
+clip = { git = "https://github.com/ultralytics/CLIP.git" }
