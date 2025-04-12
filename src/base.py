@@ -11,14 +11,12 @@ from tqdm import tqdm
 
 from config import CameraConfig, DetectorInferenceConfig
 from database import insert_one
-from utils import crop_image, get_logger
+from utils import crop_image
 
 inference_settings = DetectorInferenceConfig()
 
 
 class BaseDetector(ABC):
-    def __init__(self):
-        self.logger = get_logger()
 
     @abstractmethod
     def load_model(self):
@@ -193,12 +191,12 @@ class BaseDetector(ABC):
 
         rtsp_url = f"rtsp://{camera_config.USERNAME}:{camera_config.PASSWORD}@{camera_config.URL}:554/stream1"
         cap = cv2.VideoCapture(0 if camera_config is None else rtsp_url)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 2)
         if not cap.isOpened():
             self.logger.info("❌ Failed to connect to the RTSP stream.")
         else:
             self.logger.info("✅ RTSP stream opened successfully.")
 
-        # creates a sql lite db and table if not exists
         vid_dims = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(
             cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         )
@@ -207,9 +205,10 @@ class BaseDetector(ABC):
         )
         while True:
             # capture, process and display resulting image
-            _, frame = cap.read()
-            frame = self.process_videoframe(frame, **kwargs)
-            video_writer.write(frame)
+            ret, frame = cap.read()
+            if ret:
+                frame = self.process_videoframe(frame, **kwargs)
+            # video_writer.write(frame)
             cv2.imshow("frame", frame)
             # the 'ESC' key is set as the default key to exit the window
             if cv2.waitKey(20) & 0xFF == 27:

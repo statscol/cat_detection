@@ -3,7 +3,7 @@ import sqlite3
 
 from utils import get_logger
 
-logger = get_logger()
+logger = get_logger("database")
 
 db_name = os.environ.get("SQL_LITE_DB_NAME", "tracking")
 table_name = os.environ.get("SQL_LITE_TABLE_NAME", "events")

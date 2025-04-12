@@ -7,7 +7,7 @@ from sklearn.cluster import KMeans
 
 from utils import get_logger, percent_crop
 
-logger = get_logger()
+logger = get_logger("classifier")
 
 # top 2 colors found in the cat
 NUM_CLUSTERS = 2
@@ -20,7 +20,7 @@ class CatClassifier:
 
         # defined by taking a look at pictures and finding
         self.color_centers = np.array(
-            [[150, 150, 150], [10, 10, 10], [40, 40, 40], [60, 60, 60]]
+            [[170, 170, 170], [10, 10, 10], [40, 40, 40], [60, 60, 60]]
         )
         # in case we wanted to use the top-2 most frequent colors of the cat in RGB, we can also just use one of the colors
         # self.color_centers=np.array([[[160,160,160],[150,150,150]],[[10,10,10],[60,60,60]],[[40,40,40],[100,100,100]],[[60,60,60],[150,150,150]]]) # noqa: E501

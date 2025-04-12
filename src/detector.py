@@ -32,14 +32,17 @@ class YoloDetector(BaseDetector):
         self.out_folder.mkdir(exist_ok=True, parents=True)
         # this is meant to be used/adapted with a classifier on top of
         # yolo detections. skip it for now
-        self.logger = get_logger()
+        self.logger = get_logger("detector")
         self.load_model()
         self.inference_method = {"image": self.model, "video": self.model.track}
 
     def load_model(self):
         self.model = YOLO(self.model_name)
-        self.model.set_classes(self.detector_classes)
-        self.logger.info(f"Loaded Detector for {self.detector_classes}")
+        # if using yoloworld
+        # self.model.set_classes(self.detector_classes)
+        self.logger.info(
+            f"Loaded Detector for {','.join(self.model.names[c] for c in self.detector_classes)}"
+        )
         self.classifier = CatClassifier() if self.add_classifier else None
         self.logger.info(f"Loaded Classifier: {self.classifier}")
 
@@ -51,15 +54,16 @@ class YoloDetector(BaseDetector):
         save_crop: bool = False,
         method: str = "image",
     ):
-        """detect persons in an image provided using the @param image, can be a file path or a np.ndarray(cv2 image)"""
+        """detect objects in an image provided using the @param image, can be a file path or a np.ndarray(cv2 image)"""
         image = cv2.imread(image) if isinstance(image, str) else image
         frame = copy.deepcopy(image)
         detections = self.inference_method[method](
             source=frame,
             device=self.device,
             persist=method == "video",
-            conf=0.05,
+            conf=0.2,
             verbose=False,
+            classes=self.detector_classes,
             save_dir=str(self.out_folder),
             project=str(self.out_folder),
         )
@@ -103,7 +107,7 @@ if __name__ == "__main__":
         "save_to_disk": False,
         "method": "video",
         "save_crop": False,
-        "save_to_db": True,
+        "save_to_db": False,
     }
 
     results = detector.detect_camera(camera_config=CameraConfig(), **config)

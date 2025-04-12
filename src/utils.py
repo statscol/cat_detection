@@ -36,8 +36,8 @@ def crop_image(box, image):
     return image[y_i:y_f, x_i:x_f]
 
 
-def get_logger():
-    logger = logging.getLogger(__name__)
+def get_logger(name):
+    logger = logging.getLogger(name)
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(
         logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")

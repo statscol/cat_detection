@@ -12,8 +12,11 @@ class CameraConfig(BaseSettings):
 
 
 class DetectorInferenceConfig(BaseSettings):
-    YOLO_MODEL_NAME: str = "yolov8s-worldv2.pt"
-    YOLO_DEFAULT_CLASSES: List = ["cat"]
+
+    YOLO_MODEL_NAME: str = "yolo11m.pt"
+    # if using yoloworld
+    # YOLO_DEFAULT_CLASSES: List = ["cat"]
+    YOLO_DEFAULT_CLASSES: List = [15]
     FRAMES_UPDATE_ON_VIDEO: int = 30
     CV2_DEFAULT_TEXT_ARGS: Dict = {
         "fontFace": cv2.FONT_HERSHEY_SIMPLEX,

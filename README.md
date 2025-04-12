@@ -1,6 +1,6 @@
 # Cat Detection using Zero Shot Object Detection
 
-Want to keep track of your cats when you're not at home? This repo demonstrates how to perform cat detection using [YOLO-World](https://docs.ultralytics.com/models/yolo-world/) as a zero-shot object detector, along with a color-based classifier using K-means clustering and OpenCV.
+Want to keep track of your cats when you're not at home? This repo demonstrates how to perform cat detection using YOLO as a zero-shot object detector, along with a color-based classifier using K-means clustering and OpenCV.
 
 <br>
 <p align="center">
